@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.chart.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -60,5 +61,18 @@
           <NumberAxis side="LEFT" />
         </yAxis>
       </BarChart>
+      <LineChart fx:id="animatingLineChart" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <xAxis>
+          <NumberAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <Button fx:id="button" mnemonicParsing="false" text="Start Animating LineChart" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </Button>
    </children>
 </GridPane>

@@ -1,9 +1,16 @@
 package javafxchartsample;
 
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.AreaChart;
@@ -13,6 +20,9 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
 /**
  * JavaFX Chart Sample
@@ -27,6 +37,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML private BubbleChart bubbleChart;
     @FXML private ScatterChart scatterChart;
     @FXML private BarChart barChart;
+    @FXML private LineChart animatingLineChart;
+    @FXML Button button;
+    private Timeline tl = new Timeline();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -36,6 +49,7 @@ public class FXMLDocumentController implements Initializable {
         setBubbleChart();
         setScatterChart();
         setBarChart();
+        setAnimatingLineChart();
     }    
 
     private void setPieChart() {
@@ -124,6 +138,39 @@ public class FXMLDocumentController implements Initializable {
                 new XYChart.Data<>(c3, 6)
         );
         barChart.getData().addAll(s1, s2);
+    }
+
+    private void setAnimatingLineChart() {
+        animatingLineChart.setTitle("Animating LineChart");
+        XYChart.Series<Number, Number> series =new  XYChart.Series<>();
+        series.getData().addAll(new XYChart.Data<>(1, 10),
+                new XYChart.Data<>(2, 20),
+                new XYChart.Data<>(3, 30)
+                );
+        animatingLineChart.getData().add(series);
+        // set button event 
+        button.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+            if (button.getText().startsWith("Start")){
+                button.setText("Stop Animating LineChart");
+                // Start Animating
+                tl.getKeyFrames().add(
+                    new KeyFrame(Duration.seconds(1), event -> {
+                        animatingLineChart.getData().stream().forEach(serties -> {
+                            series.getData().stream().forEach(data -> {
+                                Random r = new Random();
+                                data.setYValue(r.nextInt(30));
+                            });
+                        });
+                    })
+                );
+                tl.setCycleCount(Animation.INDEFINITE);
+                tl.play();
+            } else {
+                button.setText("Start Animating LineChart");
+                // Stop Animating
+                tl.stop();
+            }
+        });
     }
     
 }
